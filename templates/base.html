@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Billing desk{% endblock %} · {{ business.business_name }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='signature.css') }}">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-mark">Y</span><span><strong>Yes</strong><small>technologies</small></span></a>
+      <div class="eyebrow">WORKSPACE</div>
+      <nav>
+        <a class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}"><span>⌂</span> Overview</a>
+        <a class="nav-link {% if request.endpoint == 'documents' and not selected_type %}active{% endif %}" href="{{ url_for('documents') }}"><span>▤</span> All documents</a>
+        <a class="nav-link {% if request.args.get('type') == 'invoice' %}active{% endif %}" href="{{ url_for('documents', type='invoice') }}"><span>▧</span> GST invoices</a>
+        <a class="nav-link {% if request.args.get('type') == 'quotation' %}active{% endif %}" href="{{ url_for('documents', type='quotation') }}"><span>⌁</span> Quotations</a>
+        <a class="nav-link {% if request.args.get('type') == 'proforma' %}active{% endif %}" href="{{ url_for('documents', type='proforma') }}"><span>▥</span> Proforma invoices</a>
+        <a class="nav-link {% if request.args.get('type') == 'purchase_order' %}active{% endif %}" href="{{ url_for('documents', type='purchase_order') }}"><span>▤</span> Purchase orders</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="eyebrow">CONFIGURATION</div>
+        <a class="nav-link {% if request.endpoint == 'edit_settings' %}active{% endif %}" href="{{ url_for('edit_settings') }}"><span>⚙</span> Business profile</a>
+        <div class="profile-chip"><span class="avatar">YT</span><span><strong>{{ business.business_name }}</strong><small>{{ business.gstin }}</small></span></div>
+      </div>
+    </aside>
+    <main class="main-content">
+      <header class="topbar"><div class="mobile-brand">Yes / <span>billing</span></div><div class="topbar-right"><span class="live-dot"></span> Local workspace <a class="icon-button" href="{{ url_for('edit_settings') }}" title="Business settings">⚙</a></div></header>
+      {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="flash-stack">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}<button onclick="this.parentElement.remove()">×</button></div>{% endfor %}</div>{% endif %}{% endwith %}
+      <div class="page-content">{% block content %}{% endblock %}</div>
+    </main>
+  </div>
+  <script>document.querySelectorAll('[data-add-row]').forEach(button => button.addEventListener('click', () => { const template = document.querySelector('#item-template').content.cloneNode(true); document.querySelector('#items-body').appendChild(template); })); document.addEventListener('click', event => { if (event.target.matches('[data-remove-row]')) { const rows = document.querySelectorAll('#items-body tr'); if (rows.length > 1) event.target.closest('tr').remove(); } });</script>
+</body>
+</html>
