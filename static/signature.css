@@ -1,0 +1,1 @@
+.paper-footer strong::before{content:"";display:block;width:150px;height:55px;background:url('/static/sign_stamp/yestech-signstamp.jpg') center/contain no-repeat;margin:0 0 4px auto}.paper-footer small{display:block}@media(max-width:640px){.paper-footer strong::before{margin-left:0;margin-right:auto}}
